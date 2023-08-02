@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
+.DS_Store
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -21,7 +22,7 @@ eggs/
 lib/
 lib64/
 parts/
-sdist/
+sdist//Users/ania/Repositories/playground/.gitignore
 var/
 wheels/
 share/python-wheels/
