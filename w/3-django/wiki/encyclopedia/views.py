@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 
 from . import util
 from .forms import SearchForm, CreateForm, EditForm
-from . import util
-from .forms import EditForm
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -56,6 +54,21 @@ def create(request):
             else:
                 return error(request, error="409")
         else:
-            return render(request, "encyclopedia/create.html")
-    return render(request, "encyclopedia/create.html")
+            return render(request, "encyclopedia/create.html", {"create_form": CreateForm()})
+    return render(request, "encyclopedia/create.html", {"create_form": CreateForm()})
 
+def edit(request, title):
+    if request.method == "POST":
+        form = EditForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+            util.save_entry(title, content)
+            return redirect("entry", title=title)
+        else:
+            return error(request, error="409")
+    if util.get_entry(title) == None:
+        return error(request, error="404")
+    return render(request, "encyclopedia/edit.html", {
+        "title": title,
+        "edit_form": EditForm(initial={"title": title, "content": util.get_entry(title)})
+    })
