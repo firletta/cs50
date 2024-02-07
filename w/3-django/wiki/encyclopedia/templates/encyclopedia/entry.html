@@ -4,9 +4,12 @@
     Encyclopedia
 {% endblock %}
 
+{% block nav %}
+    <a href="{% url 'edit' title=title %}">Edit Page</a>
+{% endblock %}
+
 {% block body %}
     <h1>{{ title }}</h1>
-    <article>{{ content }}</article>
-    <a href="{% url 'edit' title=title %}">Edit</a>
+    <article>{{ content | safe }}</article>
 
 {% endblock %}

@@ -1,4 +1,10 @@
 from django.shortcuts import render, redirect
+from markdown2 import Markdown
+
+def md(text):
+    markdowner = Markdown()
+    return markdowner.convert(text)
+
 
 from . import util
 from .forms import SearchForm, CreateForm, EditForm
@@ -18,7 +24,7 @@ def entry(request, title):
         return error(request, error="404")
     return render(request, "encyclopedia/entry.html", {
         "title": title,
-        "content": util.get_entry(title),
+        "content": md(util.get_entry(title)),
     })
 
 def search(request):
@@ -72,3 +78,9 @@ def edit(request, title):
         "title": title,
         "edit_form": EditForm(initial={"title": title, "content": util.get_entry(title)})
     })
+    
+def random(request):
+    import random
+    entries = util.list_entries()
+    entry = random.choice(entries)
+    return redirect("entry", title=entry)
