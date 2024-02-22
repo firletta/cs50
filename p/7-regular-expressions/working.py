@@ -1,5 +1,8 @@
 import re
 
+def main():
+    print(convert(input("Hours: ")))
+
 def convert(time_str):
     pattern = r"(\d{1,2})(?::(\d{1,2}))?\s*(AM|PM) to (\d{1,2})(?::(\d{1,2}))?\s*(AM|PM)"
     match = re.fullmatch(pattern, time_str)
@@ -21,8 +24,5 @@ def convert(time_str):
     
     return f"{start_time} to {end_time}"
 
-def main():
-    print(convert(input("Hours: ")))
-    
 if __name__ == "__main__":
     main()
