@@ -1,0 +1,21 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% if user.is_authenticated %}
+    <h2>Watchlist</h2>
+    <ul>
+        {% for auction in user.watchlist.all %}
+            <li>
+                <a href="{% url 'auction' auction.id %}">{{ auction.title }}</a>
+                <form action="{% url 'update_watchlist' auction_id=auction.id user_id=user.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Remove from Watchlist">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to view your watchlist.</p>
+{% endif %}
+{% endblock %}

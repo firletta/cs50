@@ -3,5 +3,18 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <ul>
+        <a href="{% url 'create' %}">Create Auction</a>
+        {% if auctions %}
+            {% for auction in auctions %}
+                <li>
+                    <a href="{% url 'auction' auction.id %}">{{ auction.title }}</a>
+                    <span>Created: {{ auction.created_at }}</span>
+                    <span>for {{ auction.price }}</span>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>No active auctions.</li>
+        {% endif %}
+    </ul> <!-- Added closing </ul> tag -->
 {% endblock %}

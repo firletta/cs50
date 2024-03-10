@@ -1,0 +1,52 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+    <h2>{{ auction.title }}</h2>
+    {% if user.is_authenticated %}
+    <form action="{% url 'update_watchlist' auction_id=auction.id user_id=user.id %}" method="post">
+        {% csrf_token %}
+        {% if auction in user.watchlist.all %}
+            <input type="submit" value="Remove from Watchlist">
+        {% else %}
+            <input type="submit" value="Add to Watchlist">
+        {% endif %}
+    </form>
+{% endif %}
+    {% if auction.image %}
+        <img class="auction-image" src="{{ auction.image }}" alt="{{ auction.title }}">
+    {% endif %}
+    <p>{{ auction.description }}</p>
+    <p>Current price: {{ auction.current_price }}</p>
+
+    <h4>Bids:</h4>
+    <ul>
+        {% for bid in auction.bids.all %}
+            <li>{{ bid.user }}: {{ bid.price }}</li>
+        {% endfor %}
+    </ul>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    {% if user.is_authenticated %}
+    <form action="{% url 'bid' auction_id=auction.id user_id=user.id %}" method="post">
+        {% csrf_token %}
+        <input type="number" name="price" step="0.01">
+        <input type="submit" value="Place Bid">
+    </form>
+    {% endif %}
+
+    <h4>Comments:</h4>
+    <ul>
+        {% for comment in auction.comments.all %}
+            <li>{{ comment.user }}: {{ comment.text }}</li>
+        {% endfor %}
+    </ul>
+    {% if user.is_authenticated %}
+    <form action="{% url 'comment' auction_id=auction.id user_id=user.id %}" method="post">
+        {% csrf_token %}
+        <textarea name="text" cols="40" rows="3"></textarea>
+        <input type="submit" value="Add Comment">
+    </form>
+    {% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to place a bid or add a comment.</p>
+    {% endif %}
+{% endblock %}
